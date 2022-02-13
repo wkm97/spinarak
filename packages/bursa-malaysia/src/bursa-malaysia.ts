@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 export interface HistoricalParams {
   stockcode: number;
   fromDate?: DateTime;
-  toDate?: DateTime;
+  toDate?: DateTime; // data is included
 }
 
 export interface CandleData {
@@ -25,7 +25,7 @@ export interface HistoricalData {
   data: CandleData[];
 }
 
-interface ResponseBody {
+export interface ResponseBody {
   historical_data: {
     success: number;
     record_count: number;
@@ -64,9 +64,6 @@ export const createBaseUrl = async (stockcode: number) => {
 };
 
 export const parseHistoricalData = (response: ResponseBody) => {
-  if (!response.historical_data.data) {
-    throw new Error('Data not available.');
-  }
   const allCandleData: CandleData[] = response.historical_data.data.map((item) => ({
     date: DateTime.fromMillis(item.date),
     id: item.id,
@@ -75,7 +72,7 @@ export const parseHistoricalData = (response: ResponseBody) => {
     high: parseFloat(item.high),
     low: parseFloat(item.low),
     close: parseFloat(item.close),
-    volume: typeof item.vol === 'string' ? 0 : item.vol,
+    volume: /* istanbul ignore next */ typeof item.vol === 'string' ? 0 : item.vol,
   }));
   return {
     ...response.historical_data,
@@ -83,8 +80,7 @@ export const parseHistoricalData = (response: ResponseBody) => {
   } as HistoricalData;
 };
 
-export class BursaMalaysia {
-  static async getHistorical(params: HistoricalParams) {
+export const getHistorical = async(params: HistoricalParams) => {
     params = {
       fromDate: DateTime.fromISO('2020-01-01'),
       toDate: DateTime.now(),
@@ -101,11 +97,10 @@ export class BursaMalaysia {
     const options = {
       searchParams: {
         ...searchParams,
-        from_date: fromDate?.toFormat('yyyyMMdd'),
-        to_date: toDate?.toFormat('yyyyMMdd'),
+        from_date: /* istanbul ignore next */ fromDate?.toFormat('yyyyMMdd'),
+        to_date: /* istanbul ignore next */ toDate?.toFormat('yyyyMMdd'),
       },
     };
     const responseBody = await got.get(baseUrl, options).json() as unknown as ResponseBody;
     return parseHistoricalData(responseBody);
-  }
 }

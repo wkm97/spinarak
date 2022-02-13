@@ -5,7 +5,8 @@
   "typings": "dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "test": "jest",
+    "test": "jest --testPathIgnorePatterns src/__test__/*",
+    "test:api": "jest src/__test__/api",
     "start": "ts-node src/index.ts",
     "build": "tsc -p ./tsconfig.prod.json"
   },
