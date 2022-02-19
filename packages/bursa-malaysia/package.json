@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@types/got": "^9.6.12",
-    "@types/luxon": "^2.0.9"
+    "@types/luxon": "^2.0.9",
+    "serverless": "^3.2.1"
   }
 }

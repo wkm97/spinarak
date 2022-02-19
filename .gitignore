@@ -2,3 +2,6 @@ node_modules
 coverage
 .vscode
 dist
+.serverless
+serverless-example
+.DS_Store

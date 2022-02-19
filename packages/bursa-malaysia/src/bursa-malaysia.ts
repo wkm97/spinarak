@@ -82,9 +82,9 @@ export const parseHistoricalData = (response: ResponseBody) => {
 
 export const getHistorical = async(params: HistoricalParams) => {
     params = {
-      fromDate: DateTime.fromISO('2020-01-01'),
-      toDate: DateTime.now(),
       ...params,
+      fromDate: params.fromDate? params.fromDate : DateTime.fromISO('2000-01-01'),
+      toDate: params.toDate? params.toDate: DateTime.now(),
     };
 
     const { fromDate, toDate } = params;
@@ -92,6 +92,7 @@ export const getHistorical = async(params: HistoricalParams) => {
     if (fromDate && toDate && fromDate.diff(toDate).milliseconds > 0) {
       throw new Error('fromDate cannot more than toDate.');
     }
+
 
     const { baseUrl, searchParams } = await createBaseUrl(params.stockcode);
     const options = {
