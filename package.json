@@ -7,8 +7,7 @@
   "license": "MIT",
   "private": true,
   "workspaces": [
-    "packages/*",
-    "spinarak-serverless"
+    "packages/*"
   ],
   "devDependencies": {
     "@types/jest": "^27.4.0",
